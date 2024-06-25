@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ServerForm from '../components/forms/ServerForm.jsx';
+import Products from '../components/Products.astro';
 ---
 
 <Layout title='La cesta de la compra'>
 	<ServerForm client:visible />
+	<Products />
 </Layout>
