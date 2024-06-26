@@ -9,7 +9,7 @@ create or replace table products (
 );
 
 insert into products (name) values
-	('arroz'),
-	('lentejas');
+	('patatas'),
+	('judias');
 
 select *from products;
