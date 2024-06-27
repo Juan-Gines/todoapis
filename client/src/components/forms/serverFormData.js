@@ -3,8 +3,7 @@ export const serverSelectData = Object.freeze([
 		id: 'api',
 		label: 'Selecciona un servidor',
 		options: [
-			{ value: 'node', label: 'Servidor node' },
-			{ value: 'laravel', label: 'Servidor laravel' },
+			{ value: 'node', label: 'Servidor Node' }
 		],
 	},
 
@@ -14,8 +13,10 @@ export const serverSelectData = Object.freeze([
 		options: [
 			{ value: 'mysql', label: 'MySQL' },
 			{ value: 'postgres', label: 'PostgreSQL' },
+			{ value: 'sqlserver', label: 'SqlServer' },
+			{ value: 'mongodb', label: 'Mongodb' },
 		],
 	},
-]);
+])
 
-export const servBbddButton = 'Seleccionar';
+export const servBbddButton = 'Seleccionar'

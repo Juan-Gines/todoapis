@@ -10,19 +10,16 @@ const getProductsController = async (req, res) => {
       case 'mongodb': {
         const productMongo = new ProductMongo(req.dbConnection)
         products = await productMongo.getAll()
-        await req.dbConnection.connection.close()
         break
       }
       case 'mysql': {
         const productMySQL = new ProductMySql(req.dbConnection)
         products = await productMySQL.getAll()
-        await req.dbConnection.end()
         break
       }
       case 'postgres': {
         const productPostgres = new ProductPostgres(req.dbConnection)
         products = await productPostgres.getAll()
-        await req.dbConnection.end()
         break
       }
       case 'sqlserver': {
