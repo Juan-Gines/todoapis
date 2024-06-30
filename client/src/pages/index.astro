@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Products from '../components/Products.jsx'
+import { HTML_MSG } from '../constants/htmlMsgs.js'
 ---
 
-<Layout title='La cesta de la compra'>
+<Layout title = {HTML_MSG.TITLE}>
 	<Products client:load/>
 </Layout>

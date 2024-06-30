@@ -17,7 +17,7 @@ const connectToDatabase = async (dbType) => {
       return global.mongoDBConnection
     case 'mysql':
       if (!mysqlConnection) {
-        mysqlConnection = await mysql.createPool({
+        mysqlConnection = mysql.createConnection({
           host: process.env.MYSQL_HOST,
           user: process.env.MYSQL_USER,
           password: process.env.MYSQL_PASSWORD,
@@ -27,7 +27,9 @@ const connectToDatabase = async (dbType) => {
       return mysqlConnection
     case 'postgres':
       if (!postgresConnection) {
-        postgresConnection = new PgClient({ connectionString: process.env.POSTGRES_URI })
+        postgresConnection = new PgClient({
+          connectionString: process.env.POSTGRES_URI
+        })
         await postgresConnection.connect()
       }
       return postgresConnection
@@ -38,13 +40,14 @@ const connectToDatabase = async (dbType) => {
           password: process.env.SQLSERVER_PASSWORD,
           server: process.env.SQLSERVER_HOST,
           database: process.env.SQLSERVER_DATABASE,
-          options: { encrypt: true, trustServerCertificate: true }
+          options: {
+            encrypt: true,
+            trustServerCertificate: true
+          }
         })
         await sqlServerConnection.connect()
       }
       return sqlServerConnection
-    default:
-      throw new Error('Unsupported database type')
   }
 }
 

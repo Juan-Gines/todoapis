@@ -1,5 +1,5 @@
 
-const Select = ({ id, label, options, value, onchange }) => { 	
+const Select = ({ id, label, options, titleSelection, value, onchange }) => { 	
 	
 	return (		
 		<div className='flex flex-col'>
@@ -20,7 +20,7 @@ const Select = ({ id, label, options, value, onchange }) => {
 					value=''
 					disabled
 				>
-					Selecciona una opción
+					{titleSelection}
 				</option>
 				{options.map((option) => (
 					<option

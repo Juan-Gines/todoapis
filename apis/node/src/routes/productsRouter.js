@@ -7,4 +7,10 @@ const productRouter = express.Router()
 
 productRouter.get('/', productsController.getProductsController)
 
+productRouter.post('/', productsController.addProductController)
+
+productRouter.patch('/:id', productsController.updateProductController)
+
+productRouter.delete('/:id', productsController.deleteProductController)
+
 export default productRouter

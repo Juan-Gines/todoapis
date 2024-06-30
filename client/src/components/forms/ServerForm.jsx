@@ -1,72 +1,80 @@
 // src/components/ServerForm.jsx
-import { useState, useEffect } from 'react';
-import Select from './Select.jsx';
-import Button from './Button.jsx';
-import { serverSelectData, servBbddButton } from './serverFormData';
+import { useState, useEffect, useContext } from 'react';
+import Select from './elements/Select.jsx';
+import Button from './elements/Button.jsx';
+import { ERROR_MSG } from '../../constants/errorMsgs.js';
+import { SELECTION_TEXT } from '../../constants/selectionText.js';
+import { HTML_MSG } from '../../constants/htmlMsgs.js';
+import { AppContext } from '../../context/AppContext.jsx';
 
-const ServerForm = ({onFormSubmit}) => {
+const ServerForm = () => {
+	const { handleForm } = useContext(AppContext);
 	const [api, setApi] = useState('');
 	const [bbdd, setBbdd] = useState('');
-  const [error, setError] = useState('');
+	const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'api') {
-      setApi(value);
-    } else if (name === 'bbdd') {
-      setBbdd(value);
-    }
-  };
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		if (name === SELECTION_TEXT.API) {
+			setApi(value);
+		} else if (name === SELECTION_TEXT.BBDD) {
+			setBbdd(value);
+		}
+	};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();		
-    const servers = [];
-    const bbdds = [];
-    serverSelectData.forEach((s) => {
-      s.id === 'api'
-        ? s.options.forEach((o) => servers.push(o.value))
-        : s.options.forEach((o) => bbdds.push(o.value));
-    });
-    if (!servers.includes(api) || !bbdds.includes(bbdd)) {
-      setError('Por favor selecciona un servidor API y una base de datos.');
-      return;
-    }
-		onFormSubmit({ api, bbdd });
-		localStorage.setItem('api', api);
-		localStorage.setItem('bbdd', bbdd);
-    setError('');
-  };
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const servers = [];
+		const bbdds = [];
+		HTML_MSG.SELECT_FORM_DATA.forEach((s) => {
+			s.id === SELECTION_TEXT.API
+				? s.options.forEach((o) => servers.push(o.value))
+				: s.options.forEach((o) => bbdds.push(o.value));
+		});
+		if (!servers.includes(api) || !bbdds.includes(bbdd)) {
+			setError(ERROR_MSG.SERVER_FORM);
+			return;
+		}
+		handleForm({ api, bbdd });
+		localStorage.setItem(SELECTION_TEXT.API, api);
+		localStorage.setItem(SELECTION_TEXT.BBDD, bbdd);
+		setError('');
+	};
 
 	useEffect(() => {
-		if (typeof globalThis !== 'undefined') {
-			const api = localStorage.getItem('api');
-			const bbdd = localStorage.getItem('bbdd');
+		if (typeof globalThis !== SELECTION_TEXT.UNDEFINED) {
+			const api = localStorage.getItem(SELECTION_TEXT.API);
+			const bbdd = localStorage.getItem(SELECTION_TEXT.BBDD);
 			if (api && bbdd) {
 				setApi(api);
 				setBbdd(bbdd);
 			}
 		}
-	}
-	, []);
+	}, []);
 
-  return (
-    <form onSubmit={handleSubmit} className='max-w-sm mx-auto mb-7'>
-      <div className='flex gap-4'>
-        {serverSelectData.map((select) => (
-          <Select
-            key={select.id}
-            {...select}
-            value={select.id === 'api' ? api : bbdd}
-            onchange={handleChange}
-          />
-        ))}
-      </div>
-      {error && <p className='text-red-500 text-sm text-center pb-4'>*{error}</p>}
-      <div className='flex place-content-center'>
-        <Button title={servBbddButton} />
-      </div>
-    </form>
-  );
+	return (
+		<form
+			onSubmit={handleSubmit}
+			className='max-w-sm mx-auto mb-7'
+		>
+			<div className='flex gap-4'>
+				{HTML_MSG.SELECT_FORM_DATA.map((select) => (
+					<Select
+						key={select.id}
+						{...select}
+						value={select.id === SELECTION_TEXT.API ? api : bbdd}
+						onchange={handleChange}
+					/>
+				))}
+			</div>
+			{error && <p className='text-red-500 text-sm text-center pb-4'>*{error}</p>}
+			<div className='flex place-content-center'>
+				<Button
+					title={HTML_MSG.SERV_BBDD_BUTTON}
+				/>
+			</div>
+		</form>
+	);
 };
 
 export default ServerForm;
