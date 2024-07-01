@@ -39,7 +39,7 @@ const ProductsList = () => {
 			})
 				.then((res) => res.json())
 				.then((data) => data.error ? setError(data.error) : setProductList(data))
-				.catch((err) => console.error(err))
+				.catch((err) => setError(err.message || JSON.stringify))
 				.finally(() => {
 					setLoading(false);
 					handleFormActive(true);
