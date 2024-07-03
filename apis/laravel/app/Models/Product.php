@@ -11,5 +11,12 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $collection = 'products';
+    protected $fillable = [
+        'name',
+        'onbasket',
+    ];
+
+    protected $casts = [
+        'onbasket' => 'boolean',
+    ];
 }

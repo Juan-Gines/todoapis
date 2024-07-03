@@ -5,7 +5,10 @@ export const HTML_MSG = Object.freeze({
 			id: 'api',
 			label: 'Selecciona un servidor',
 			titleSelection: 'Selecciona una opción',
-			options: [{ value: 'node', label: 'Servidor Node' }],
+			options: [
+				{ value: 'node', label: 'Servidor Node' },
+				{ value: 'laravel', label: 'Servidor Laravel' },				
+			],
 		},
 		{
 			id: 'bbdd',

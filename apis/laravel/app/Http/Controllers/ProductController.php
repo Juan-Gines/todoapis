@@ -4,37 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductMongo;
 use Illuminate\Http\Request;
 use MongoDB\Client;
+use MongoDB\BSON\ObjectId;
 
 class ProductController extends Controller
 {
-    protected $client;
-
-    public function __construct()
-    {
-        $this->client = new Client("mongodb://127.0.0.1:27017");
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         if (config('database.default') === 'mongodb') {
-            $collection = $this->client->basket->products;
-            return $collection->find()->toArray();
+
+            return ProductMongo::all()->toArray();
         }
 
-        $prod = Product::all();
-        return $prod->toJson();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Product::all()->toJson();
     }
 
     /**
@@ -42,23 +29,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|string|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if (config('database.default') === 'mongodb') {
+            $product = new ProductMongo();
+        } else {
+            $product = new Product();
+        }
+
+        $product->fill($request->all());
+        $product->save();
+        return response()->json(['message' => 'Product created'], 201);
     }
 
     /**
@@ -66,7 +50,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'onbasket' => 'required|boolean',
+        ]);
+
+        if (config('database.default') === 'mongodb') {
+            $product = ProductMongo::find($id);
+        } else {
+            $product = Product::find($id);
+        }
+
+        $product->update($request->all());
+        $product->save();
+        return response()->json(['message' => 'Product updated'], 200);
     }
 
     /**
@@ -74,6 +70,25 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (config('database.default') === 'mongodb') {
+            $product = ProductMongo::find($id);
+        } else {
+            $product = Product::find($id);
+        }
+        $product->delete();
+        return response()->json(['message' => 'Product deleted'], 200);
+    }
+
+    private function returnWithId($products)
+    {
+        $productsArray = array_map(function ($product) {
+            return [
+                'id' => (string) $product->_id,
+                'name' => $product->name,
+                'onbasket' => $product->onbasket,
+            ];
+        }, $products);
+
+        return $productsArray;
     }
 }

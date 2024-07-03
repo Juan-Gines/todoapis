@@ -30,12 +30,14 @@ const ProductsList = () => {
 		handleFormActive(false);
 		const { api, bbdd } = formData;		
 		const url = selectServer(api);
+		const credentials = (api === SELECTION_TEXT.Laravel) ? 'include' : 'omit';
 		const fetchProducts = () => {
 			fetch(url, {
 				headers: {
 					Accept: 'application/json',
 					'x-db-type': bbdd,
 				},
+				credentials,
 			})
 				.then((res) => res.json())
 				.then((data) => data.error ? setError(data.error) : setProductList(data))
