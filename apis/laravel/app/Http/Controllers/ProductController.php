@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductMongo;
 use Illuminate\Http\Request;
-use MongoDB\Client;
-use MongoDB\BSON\ObjectId;
+
 
 class ProductController extends Controller
 {
@@ -40,7 +39,7 @@ class ProductController extends Controller
             $product = new Product();
         }
 
-        $product->fill($request->all());
+        $product->created($request->all());
         $product->save();
         return response()->json(['message' => 'Product created'], 201);
     }
@@ -77,18 +76,5 @@ class ProductController extends Controller
         }
         $product->delete();
         return response()->json(['message' => 'Product deleted'], 200);
-    }
-
-    private function returnWithId($products)
-    {
-        $productsArray = array_map(function ($product) {
-            return [
-                'id' => (string) $product->_id,
-                'name' => $product->name,
-                'onbasket' => $product->onbasket,
-            ];
-        }, $products);
-
-        return $productsArray;
     }
 }

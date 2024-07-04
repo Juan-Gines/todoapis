@@ -1,0 +1,81 @@
+# Archivos de compilación de .NET
+bin/
+obj/
+out/
+
+# Archivos de configuración de Visual Studio
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Herramientas de Rider
+.idea/
+
+# Archivos .env
+.env
+
+# Carpetas de paquetes NuGet
+**/[Pp]ackages/*
+**/[Pp]ackage[Rr]estore.*
+**/[Pp]roject.[Ll]ock.[Jj]son
+project.assets.json
+*.csproj.nuget.*
+*.nuget.props
+*.nuget.targets
+
+# Archivos de Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# TeamCity
+_TeamCity*
+
+# Archivos de usuario de DotCover
+*.dotCover
+
+# MonoDevelop
+*.userprefs
+
+# Archivos de Mac y Linux
+.DS_Store
+._*
+*~
+*.swp
+*.lock
+*.pidb
+*.pidb.meta
+*.workspace
+Thumbs.db
+ehthumbs.db
+
+# Archivos de salida
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# Archivos generados por herramientas de cobertura de código
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# Archivos de herramientas de análisis estático
+GlobalSuppressions.cs
+
+# Archivos de paquetes de Node.js
+node_modules/
+
+# Archivos de entorno de desarrollo local
+appsettings.Development.json
+appsettings.Local.json
+
+# Archivos generados por Visual Studio para pruebas locales
+*.trx
+*.testlog
+*.vspscc
+*.vssscc

@@ -20,6 +20,8 @@ const ProductsList = () => {
 				return url;
 			} else if (api === SELECTION_TEXT.LARAVEL) {
 				return import.meta.env.PUBLIC_LARAVEL_SERVER;
+			} else if (api === SELECTION_TEXT.NET) {
+				return import.meta.env.PUBLIC_NET_SERVER;
 			}
 		}
 	};
@@ -34,7 +36,9 @@ const ProductsList = () => {
 		const fetchProducts = () => {
 			fetch(url, {
 				headers: {
-					Accept: 'application/json',
+					'Access-Control-Allow-Origin': '*',
+					accept: 'application/json',
+					'content-type': 'application/json',
 					'x-db-type': bbdd,
 				},
 				credentials,

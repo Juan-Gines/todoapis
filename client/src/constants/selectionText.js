@@ -4,5 +4,6 @@ export const SELECTION_TEXT = Object.freeze({
 	UNDEFINED: 'undefined',
 	NODE: 'node',
 	LARAVEL: 'laravel',
+	NET: 'net',
 	NAME: 'name',
 });

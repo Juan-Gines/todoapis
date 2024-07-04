@@ -8,6 +8,7 @@ export const HTML_MSG = Object.freeze({
 			options: [
 				{ value: 'node', label: 'Servidor Node' },
 				{ value: 'laravel', label: 'Servidor Laravel' },				
+				{ value: 'net', label: 'Servidor ASP.NET' },				
 			],
 		},
 		{
