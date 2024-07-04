@@ -19,7 +19,7 @@ class ProductMongo {
     try {
       const product = new this.Products({ name })
       await product.save()
-      return product
+      return await this.getAll()
     } catch (error) {
       throw new Error({ error: `Mongodb Error: ${error.message}` })
     }
@@ -27,8 +27,8 @@ class ProductMongo {
 
   async update (id, onbasket) {
     try {
-      const product = await this.Products.findOneAndUpdate({ _id: id }, { onbasket }, { new: true })
-      return product
+      await this.Products.findOneAndUpdate({ _id: id }, { onbasket }, { new: true })
+      return await this.getAll()
     } catch (error) {
       throw new Error({ error: `Mongodb Error: ${error.message}` })
     }
@@ -37,7 +37,7 @@ class ProductMongo {
   async delete (id) {
     try {
       await this.Products.deleteOne({ _id: id })
-      return { id }
+      return await this.getAll()
     } catch (error) {
       throw new Error({ error: `Mongodb Error: ${error.message}` })
     }

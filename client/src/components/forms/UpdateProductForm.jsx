@@ -4,7 +4,7 @@ import uncheckIcon from '../assets/icons/Uncheck.svg'
 import { AppContext } from '../../context/AppContext';
 
 const UpdateProductForm = ({ product }) => {
-  const { formData, formActive, handleReload } = useContext(AppContext);
+  const { formData, formActive, handleError, handleProductList } = useContext(AppContext);
   const handleSubmit = (e) => {
     e.preventDefault()
     fetch(import.meta.env.PUBLIC_NODE_SERVER + '/' + product.id , {
@@ -18,13 +18,13 @@ const UpdateProductForm = ({ product }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          console.error(data.error)
+          handleError(data.error)
         } else {
           console.log('Product updated')
-          handleReload()
+          handleProductList(data)
         }
       })
-      .catch((err) => console.error(err.message))
+      .catch((err) => handleError(err.message))
   }
   return (
     <form onSubmit={handleSubmit}>

@@ -35,5 +35,16 @@ namespace Net.Services
 
       return productList;
     }
+
+    public async Task CreateProductAsync(Product product)
+    {
+      var document = new BsonDocument
+      {
+        { "name", product.Name },
+        { "onbasket", false }
+      };
+
+      await _collection.InsertOneAsync(document);
+    }
   }
 }

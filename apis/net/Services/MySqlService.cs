@@ -7,11 +7,13 @@ namespace Net.Services
   public class MySqlService
   {
     private readonly string _connectionString;
+    private readonly MySqlConnection connection;
 
     public MySqlService()
     {
       _connectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION")
           ?? throw new InvalidOperationException("MYSQL_CONNECTION environment variable is not set.");
+      connection = new MySqlConnection(_connectionString);
     }
 
     public async Task<List<Product>> GetDataAsync()
@@ -20,7 +22,7 @@ namespace Net.Services
 
       try
       {
-        await using var connection = new MySqlConnection(_connectionString);
+
         await connection.OpenAsync();
 
         await using var command = new MySqlCommand("SELECT Id, Name, OnBasket FROM products;", connection);
@@ -48,7 +50,31 @@ namespace Net.Services
         throw;
       }
 
+
       return resultList;
+    }
+
+    public async Task CreateProductAsync(Product product)
+    {
+      try
+      {
+        await connection.OpenAsync();
+
+        await using var command = new MySqlCommand("INSERT INTO products (Name) VALUES (@Name);", connection);
+        command.Parameters.AddWithValue("@Name", product.Name);
+
+        await command.ExecuteNonQueryAsync();
+      }
+      catch (MySqlException ex)
+      {
+        Console.WriteLine($"MySQL Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
     }
   }
 }

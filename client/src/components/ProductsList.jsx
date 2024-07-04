@@ -1,64 +1,11 @@
 // src/components/ProductsList.jsx
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import Product from './Product.jsx';
-import { ERROR_MSG } from '../constants/errorMsgs.js';
-import { SELECTION_TEXT } from '../constants/selectionText.js';
 import { HTML_MSG } from '../constants/htmlMsgs.js';
 import { AppContext } from '../context/AppContext.jsx';
 
 const ProductsList = () => {
-	const { formData, reload, handleFormActive } = useContext(AppContext);
-	const [productList, setProductList] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
-	const selectServer = (api) => {
-		if (api) {
-			let url = '';
-			if (api === SELECTION_TEXT.NODE) {
-				url = import.meta.env.PUBLIC_NODE_SERVER;
-				return url;
-			} else if (api === SELECTION_TEXT.LARAVEL) {
-				return import.meta.env.PUBLIC_LARAVEL_SERVER;
-			} else if (api === SELECTION_TEXT.NET) {
-				return import.meta.env.PUBLIC_NET_SERVER;
-			}
-		}
-	};
-
-	useEffect(() => {
-		setError(null);
-		setLoading(true);
-		handleFormActive(false);
-		const { api, bbdd } = formData;		
-		const url = selectServer(api);
-		const credentials = (api === SELECTION_TEXT.Laravel) ? 'include' : 'omit';
-		const fetchProducts = () => {
-			fetch(url, {
-				headers: {
-					'Access-Control-Allow-Origin': '*',
-					accept: 'application/json',
-					'content-type': 'application/json',
-					'x-db-type': bbdd,
-				},
-				credentials,
-			})
-				.then((res) => res.json())
-				.then((data) => data.error ? setError(data.error) : setProductList(data))
-				.catch((err) => setError(err.message || JSON.stringify))
-				.finally(() => {
-					setLoading(false);
-					handleFormActive(true);
-				});
-		};
-		if (api && bbdd) {
-			fetchProducts();
-		} else {
-			setLoading(false);
-			handleFormActive(true);
-			setError(ERROR_MSG.NO_SERVER_OR_BD);
-		}
-	}, [formData.api, formData.bbdd, reload]);
+	const { loading, productList, error } = useContext(AppContext);
 
 	if (error) {
 		return <div className='text-red-600'>* {error}</div>;
@@ -73,7 +20,7 @@ const ProductsList = () => {
 			{productList.length > 0 ? (
 				productList.map((product) => (
 					<Product
-						key={product.id.toString()}
+						key={product.id}
 						id={product.id}
 						name={product.name}						
 						onbasket={product.onbasket}

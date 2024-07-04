@@ -17,7 +17,7 @@ class ProductPostgres {
   async add (name) {
     try {
       await this.dbConnection.query('INSERT INTO products (name) VALUES ($1)', [name])
-      return { name }
+      return this.getAll()
     } catch (error) {
       throw new Error({ error: `Postgres Error: ${error.message}` })
     }
@@ -26,7 +26,7 @@ class ProductPostgres {
   async update (id, onbasket) {
     try {
       await this.dbConnection.query('UPDATE products SET onbasket = $1 WHERE id = $2', [onbasket, id])
-      return { id, onbasket }
+      return this.getAll()
     } catch (error) {
       throw new Error({ error: `Postgres Error: ${error.message}` })
     }
@@ -35,7 +35,7 @@ class ProductPostgres {
   async delete (id) {
     try {
       await this.dbConnection.query('DELETE FROM products WHERE id = $1', [id])
-      return { id }
+      return this.getAll()
     } catch (error) {
       throw new Error({ error: `Postgres Error: ${error.message}` })
     }

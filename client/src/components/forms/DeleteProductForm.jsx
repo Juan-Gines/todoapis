@@ -3,7 +3,7 @@ import deleteIcon from '../assets/icons/Delete.svg'
 import { AppContext } from '../../context/AppContext';
 
 const DeleteProductForm = ({ product }) => {
-  const { formData, formActive, handleReload } = useContext(AppContext);
+  const { formData, formActive, handleError, handleProductList } = useContext(AppContext);
   const handleSubmit = (e) => {
     e.preventDefault()
     fetch(import.meta.env.PUBLIC_NODE_SERVER + '/' + product.id , {
@@ -16,13 +16,13 @@ const DeleteProductForm = ({ product }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          console.error(data.error)
+          handleError(data.error)
         } else {
           console.log('Product deleted')
-          handleReload()
+          handleProductList(data)
         }
       })
-      .catch((err) => console.error(err.message))
+      .catch((err) => handleError(err.message))
   }
   return (
     <form onSubmit={handleSubmit}>

@@ -8,10 +8,9 @@ import { HTML_MSG } from '../../constants/htmlMsgs.js';
 import { AppContext } from '../../context/AppContext.jsx';
 
 const ServerForm = () => {
-	const { handleForm } = useContext(AppContext);
+	const { error, handleError, handleForm } = useContext(AppContext);
 	const [api, setApi] = useState('');
 	const [bbdd, setBbdd] = useState('');
-	const [error, setError] = useState('');
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -32,13 +31,13 @@ const ServerForm = () => {
 				: s.options.forEach((o) => bbdds.push(o.value));
 		});
 		if (!servers.includes(api) || !bbdds.includes(bbdd)) {
-			setError(ERROR_MSG.SERVER_FORM);
+			handleError(ERROR_MSG.SERVER_FORM);
 			return;
 		}
 		handleForm({ api, bbdd });
 		localStorage.setItem(SELECTION_TEXT.API, api);
 		localStorage.setItem(SELECTION_TEXT.BBDD, bbdd);
-		setError('');
+		handleError('');
 	};
 
 	useEffect(() => {
@@ -66,8 +65,7 @@ const ServerForm = () => {
 						onchange={handleChange}
 					/>
 				))}
-			</div>
-			{error && <p className='text-red-500 text-sm text-center pb-4'>*{error}</p>}
+			</div>			
 			<div className='flex place-content-center'>
 				<Button
 					title={HTML_MSG.SERV_BBDD_BUTTON}

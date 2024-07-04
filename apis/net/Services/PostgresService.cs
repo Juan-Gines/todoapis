@@ -50,5 +50,28 @@ namespace Net.Services
 
       return resultList;
     }
+
+    public async Task CreateProductAsync(Product product)
+    {
+      try
+      {
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new NpgsqlCommand("INSERT INTO products (Name) VALUES (@Name);", connection);
+        command.Parameters.AddWithValue("@Name", product.Name);
+        await command.ExecuteNonQueryAsync();
+      }
+      catch (PostgresException ex)
+      {
+        Console.WriteLine($"PostgreSQL Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+    }
   }
 }

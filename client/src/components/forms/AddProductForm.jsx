@@ -7,9 +7,8 @@ import { SELECTION_TEXT } from '../../constants/selectionText';
 import { ERROR_MSG } from '../../constants/errorMsgs';
 
 const AddProductForm = () => {
-	const { formData, handleReload } = useContext(AppContext);
+	const { formData, handleProductList, handleError } = useContext(AppContext);
 	const [name, setName] = useState('');
-	const [error, setError] = useState('');
 
 	const handleChange = (e) => {
 		const { value } = e.target;
@@ -18,9 +17,9 @@ const AddProductForm = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setError('');
+		handleError('');
 		if (!name) {
-			setError(ERROR_MSG.INPUT_EMPTY);
+			handleError(ERROR_MSG.INPUT_EMPTY);
 			return;
 		}
 		fetch(import.meta.env.PUBLIC_NODE_SERVER, {
@@ -34,14 +33,12 @@ const AddProductForm = () => {
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.error) {
-					setError(data.error);
+					handleError(data.error);
 				} else {
-					handleReload();
+					handleProductList(data);
 				}
 			})
-			.catch((err) => setError(err.message));
-
-		handleReload();
+			.catch((err) => handleError(err.message));
 		setName('');
 	};
 
@@ -61,7 +58,6 @@ const AddProductForm = () => {
 					title={HTML_MSG.ADD_BUTTON}
 				/>
 			</div>
-			{error && <p className='text-red-500 text-left'>*{error}</p>}
 		</form>
 	);
 };

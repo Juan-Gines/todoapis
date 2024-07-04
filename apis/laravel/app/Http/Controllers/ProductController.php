@@ -41,7 +41,7 @@ class ProductController extends Controller
 
         $product->created($request->all());
         $product->save();
-        return response()->json(['message' => 'Product created'], 201);
+        return $this->index();
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
         $product->save();
-        return response()->json(['message' => 'Product updated'], 200);
+        return $this->index();
     }
 
     /**
@@ -75,6 +75,6 @@ class ProductController extends Controller
             $product = Product::find($id);
         }
         $product->delete();
-        return response()->json(['message' => 'Product deleted'], 200);
+        return $this->index();
     }
 }

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { SELECTION_TEXT } from '../constants/selectionText.js';
+import { ERROR_MSG } from '../constants/errorMsgs.js';
 
 const AppContext = createContext();
 
@@ -9,7 +10,9 @@ const AppProvider = ({ children }) => {
 		bbdd: '',
 	});
 	const [formActive, setformActive] = useState(true);
-	const [reload, setReload] = useState(false);
+	const [productList, setProductList] = useState([]);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const handleFormActive = (active) => {
 		setformActive(active);
@@ -18,9 +21,27 @@ const AppProvider = ({ children }) => {
 	const handleForm = (data) => {
 		setformData(data);
 	};
+	
+	const handleProductList = (data) => {		
+		setProductList(data);
+	};
+	
+	const handleError = (error) => {
+		setError(error);
+	}
 
-	const handleReload = () => {
-		setReload(!reload);
+	const selectServer = (api) => {
+		if (api) {
+			let url = '';
+			if (api === SELECTION_TEXT.NODE) {
+				url = import.meta.env.PUBLIC_NODE_SERVER;
+				return url;
+			} else if (api === SELECTION_TEXT.LARAVEL) {
+				return import.meta.env.PUBLIC_LARAVEL_SERVER;
+			} else if (api === SELECTION_TEXT.NET) {
+				return import.meta.env.PUBLIC_NET_SERVER;
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -33,8 +54,42 @@ const AppProvider = ({ children }) => {
 		}
 	}, []);
 
+	useEffect(() => {
+		handleError(null);
+		setLoading(true);
+		handleFormActive(false);
+		const { api, bbdd } = formData;		
+		const url = selectServer(api);
+		const credentials = (api === SELECTION_TEXT.Laravel) ? 'include' : 'omit';
+		const fetchProducts = () => {
+			fetch(url, {
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					accept: 'application/json',
+					'content-type': 'application/json',
+					'x-db-type': bbdd,
+				},
+				credentials,
+			})
+				.then((res) => res.json())
+				.then((data) => data.error ? handleError(data.error) : handleProductList(data))
+				.catch((err) => handleError(err.message || JSON.stringify))
+				.finally(() => {
+					setLoading(false);
+					handleFormActive(true);
+				});
+		};
+		if (api && bbdd) {
+			fetchProducts();
+		} else {
+			setLoading(false);
+			handleFormActive(true);
+			handleError(ERROR_MSG.NO_SERVER_OR_BD);
+		}
+	}, [formData.api, formData.bbdd]);
+
   return (
-    <AppContext.Provider value={{ formData, reload, formActive, handleForm, handleFormActive, handleReload }}>
+    <AppContext.Provider value={{ formData, formActive, productList, error, loading, handleProductList, handleError, handleForm, handleFormActive }}>
       {children}
     </AppContext.Provider>
   );

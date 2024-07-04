@@ -51,5 +51,29 @@ namespace Net.Services
 
       return resultList;
     }
+
+    public async Task CreateProductAsync(Product product)
+    {
+      try
+      {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new SqlCommand("INSERT INTO products (Name) VALUES (@Name);", connection);
+        command.Parameters.Add("@Name", SqlDbType.VarChar).Value = product.Name;
+
+        await command.ExecuteNonQueryAsync();
+      }
+      catch (SqlException ex)
+      {
+        Console.WriteLine($"SQL Server Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+    }
   }
 }

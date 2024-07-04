@@ -59,16 +59,16 @@ namespace net.Controllers
       switch (dbType.ToLower())
       {
         case "mysql":
-          await _mySqlService.AddDataAsync(product);
+          await _mySqlService.CreateProductAsync(product);
           break;
         case "sqlserver":
-          await _sqlServerService.AddDataAsync(product);
+          await _sqlServerService.CreateProductAsync(product);
           break;
         case "postgres":
-          await _postgreSqlService.AddDataAsync(product);
+          await _postgreSqlService.CreateProductAsync(product);
           break;
         case "mongodb":
-          await _mongoDbService.AddDataAsync(product);
+          await _mongoDbService.CreateProductAsync(product);
           break;
         default:
           return BadRequest("Unsupported database type.");
