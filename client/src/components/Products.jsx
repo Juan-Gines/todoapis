@@ -4,6 +4,7 @@ import HeaderProducts from './HeaderProducts.jsx';
 import ProductList from './ProductsList.jsx';
 import ServerForm from './forms/ServerForm.jsx';
 import AddProductForm from './forms/AddProductForm.jsx';
+import Panel from './Panel.jsx';
 
 const Products = () => {
 	
@@ -13,6 +14,7 @@ const Products = () => {
 				<div className='max-w-3xl min-w mx-auto'>
 					<ServerForm	/>
 					<HeaderProducts />
+					<Panel />
 					<AddProductForm	/>
 					<ProductList />
 				</div>

@@ -19,7 +19,16 @@ namespace Net.Services
 
     public async Task<List<ProductMongo>> GetDataAsync()
     {
-      var documents = await _collection.Find(new BsonDocument()).ToListAsync();
+      List<BsonDocument> documents;
+      try
+      {
+        documents = await _collection.Find(new BsonDocument()).ToListAsync();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"MongoDB Error: {ex.Message}");
+        throw;
+      }
       var productList = new List<ProductMongo>();
 
       foreach (var doc in documents)
@@ -45,6 +54,24 @@ namespace Net.Services
       };
 
       await _collection.InsertOneAsync(document);
+      await GetDataAsync();
+    }
+
+    public async Task UpdateProductAsync(string id, Product product)
+    {
+      var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+      var update = Builders<BsonDocument>.Update
+          .Set("onbasket", product.Onbasket);
+
+      await _collection.UpdateOneAsync(filter, update);
+      await GetDataAsync();
+    }
+
+    public async Task DeleteProductAsync(string id)
+    {
+      var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+      await _collection.DeleteOneAsync(filter);
+      await GetDataAsync();
     }
   }
 }

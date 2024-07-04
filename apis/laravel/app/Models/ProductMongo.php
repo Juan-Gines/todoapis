@@ -6,18 +6,9 @@ use MongoDB\Laravel\Eloquent\Model;
 
 class ProductMongo extends Model
 {
-    protected $conection = 'mongodb';
+    protected $connection = 'mongodb';
 
     protected $collection = 'products';
-
-    protected $fillable = [
-        'name',
-        'onbasket',
-    ];
-
-    protected $attributes = [
-        'onbasket' => false,
-    ];
 
     public function toArray()
     {

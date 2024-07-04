@@ -7,7 +7,7 @@ import { SELECTION_TEXT } from '../../constants/selectionText';
 import { ERROR_MSG } from '../../constants/errorMsgs';
 
 const AddProductForm = () => {
-	const { formData, handleProductList, handleError } = useContext(AppContext);
+	const { formData, handleProductList, handleError, handleFetchTime, handleAction } = useContext(AppContext);
 	const [name, setName] = useState('');
 
 	const handleChange = (e) => {
@@ -22,6 +22,8 @@ const AddProductForm = () => {
 			handleError(ERROR_MSG.INPUT_EMPTY);
 			return;
 		}
+		const startTime = performance.now();
+		handleAction(HTML_MSG.ACTION.ADD);
 		fetch(import.meta.env.PUBLIC_NODE_SERVER, {
 			method: 'POST',
 			headers: {
@@ -39,6 +41,9 @@ const AddProductForm = () => {
 				}
 			})
 			.catch((err) => handleError(err.message));
+		const endTime = performance.now();
+		const time = endTime - startTime;
+		handleFetchTime(time.toFixed(2) + ' ms');
 		setName('');
 	};
 

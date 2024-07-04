@@ -29,4 +29,11 @@ export const HTML_MSG = Object.freeze({
 	NO_PRODUCTS: 'No hay productos en la cesta',
 	NEW_PRODUCT: 'Nuevo producto',
 	ADD_BUTTON: 'Añadir',
+	ACTION: {
+		DELETE: 'Eliminar',
+		ADD: 'Añadir',
+		UPDATE: 'Actualizar',
+		GET: 'Obtener',
+	},
+	
 });

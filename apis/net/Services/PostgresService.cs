@@ -32,7 +32,7 @@ namespace Net.Services
           {
             Id = reader.GetInt32("Id"),
             Name = reader.GetString("Name"),
-            OnBasket = reader.GetBoolean("Onbasket")
+            Onbasket = reader.GetBoolean("Onbasket")
           };
           resultList.Add(product);
         }
@@ -61,6 +61,7 @@ namespace Net.Services
         await using var command = new NpgsqlCommand("INSERT INTO products (Name) VALUES (@Name);", connection);
         command.Parameters.AddWithValue("@Name", product.Name);
         await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
       }
       catch (PostgresException ex)
       {
@@ -72,6 +73,58 @@ namespace Net.Services
         Console.WriteLine($"General Error: {ex.Message}");
         throw;
       }
+
+    }
+
+    public async Task UpdateProductAsync(Product product)
+    {
+      try
+      {
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new NpgsqlCommand("UPDATE products SET OnBasket = @OnBasket WHERE Id = @Id;", connection);
+        command.Parameters.AddWithValue("@Id", product.Id);
+        command.Parameters.AddWithValue("@OnBasket", product.Onbasket);
+        await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
+      }
+      catch (PostgresException ex)
+      {
+        Console.WriteLine($"PostgreSQL Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+
+    }
+
+    public async Task DeleteProductAsync(int id)
+    {
+      try
+      {
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new NpgsqlCommand("DELETE FROM products WHERE Id = @Id;", connection);
+        command.Parameters.AddWithValue("@Id", id);
+        await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
+      }
+      catch (PostgresException ex)
+      {
+        Console.WriteLine($"PostgreSQL Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+
     }
   }
 }

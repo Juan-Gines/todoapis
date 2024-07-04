@@ -1,9 +1,9 @@
-namespace Net.Models // Asegúrate de cambiar 'YourNamespace' al espacio de nombres correcto de tu proyecto
+namespace Net.Models
 {
   public class Product
   {
     public long Id { get; set; }
     public required string Name { get; set; }
-    public bool OnBasket { get; set; }
+    public bool Onbasket { get; set; }
   }
 }

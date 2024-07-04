@@ -33,7 +33,7 @@ namespace Net.Services
           {
             Id = reader.GetInt64("Id"),
             Name = reader.GetString("Name"),
-            OnBasket = reader.GetBoolean("Onbasket")
+            Onbasket = reader.GetBoolean("Onbasket")
           };
           resultList.Add(product);
         }
@@ -63,6 +63,58 @@ namespace Net.Services
         command.Parameters.Add("@Name", SqlDbType.VarChar).Value = product.Name;
 
         await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
+      }
+      catch (SqlException ex)
+      {
+        Console.WriteLine($"SQL Server Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+    }
+
+    public async Task UpdateProductAsync(Product product)
+    {
+      try
+      {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new SqlCommand("UPDATE products SET Name = @Name WHERE Id = @Id;", connection);
+        command.Parameters.Add("@Name", SqlDbType.VarChar).Value = product.Name;
+        command.Parameters.Add("@Id", SqlDbType.BigInt).Value = product.Id;
+
+        await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
+      }
+      catch (SqlException ex)
+      {
+        Console.WriteLine($"SQL Server Error: {ex.Message}");
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"General Error: {ex.Message}");
+        throw;
+      }
+    }
+
+    public async Task DeleteProductAsync(long id)
+    {
+      try
+      {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new SqlCommand("DELETE FROM products WHERE Id = @Id;", connection);
+        command.Parameters.Add("@Id", SqlDbType.BigInt).Value = id;
+
+        await command.ExecuteNonQueryAsync();
+        await GetDataAsync();
       }
       catch (SqlException ex)
       {

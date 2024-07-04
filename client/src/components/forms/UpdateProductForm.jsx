@@ -2,11 +2,15 @@ import { useContext } from 'react'
 import checkIcon from '../assets/icons/Check.svg'
 import uncheckIcon from '../assets/icons/Uncheck.svg'
 import { AppContext } from '../../context/AppContext';
+import { HTML_MSG } from '../../constants/htmlMsgs';
 
 const UpdateProductForm = ({ product }) => {
-  const { formData, formActive, handleError, handleProductList } = useContext(AppContext);
+  const { formData, formActive, handleError, handleProductList, handleFetchTime, handleAction } = useContext(AppContext);
   const handleSubmit = (e) => {
     e.preventDefault()
+    handleError('')
+    handleAction(HTML_MSG.ACTION.UPDATE)
+    const startTime = performance.now()
     fetch(import.meta.env.PUBLIC_NODE_SERVER + '/' + product.id , {
       method: 'PATCH',
       headers: {
@@ -20,11 +24,13 @@ const UpdateProductForm = ({ product }) => {
         if (data.error) {
           handleError(data.error)
         } else {
-          console.log('Product updated')
           handleProductList(data)
         }
       })
       .catch((err) => handleError(err.message))
+    const endTime = performance.now()
+    const time = endTime - startTime
+    handleFetchTime(time.toFixed(2) + ' ms')
   }
   return (
     <form onSubmit={handleSubmit}>

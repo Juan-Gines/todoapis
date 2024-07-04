@@ -30,17 +30,15 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
+            'onbasket' => 'required|boolean',
         ]);
 
-
         if (config('database.default') === 'mongodb') {
-            $product = new ProductMongo();
+            ProductMongo::create($request->all());
         } else {
-            $product = new Product();
+            Product::create($request->all());
         }
 
-        $product->created($request->all());
-        $product->save();
         return $this->index();
     }
 

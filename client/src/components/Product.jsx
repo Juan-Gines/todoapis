@@ -1,7 +1,7 @@
 import DeleteProductForm from './forms/DeleteProductForm.jsx';
 import UpdateProductForm from './forms/UpdateProductForm.jsx'
 
-const Product = ({ id, name, onbasket }) => (
+const Product = ({ id, name, onbasket = false }) => (
 	<li
 		className='flex items-center justify-between p-2 gap-5 bg-gray-100 dark:bg-gray-800/70 rounded-md'
 	>

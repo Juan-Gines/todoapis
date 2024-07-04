@@ -8,7 +8,7 @@ import { HTML_MSG } from '../../constants/htmlMsgs.js';
 import { AppContext } from '../../context/AppContext.jsx';
 
 const ServerForm = () => {
-	const { error, handleError, handleForm } = useContext(AppContext);
+	const { handleError, handleForm } = useContext(AppContext);
 	const [api, setApi] = useState('');
 	const [bbdd, setBbdd] = useState('');
 
