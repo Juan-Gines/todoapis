@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import deleteIcon from '../assets/icons/Delete.svg'
 import { AppContext } from '../../context/AppContext';
+import { HTML_MSG } from '../../constants/htmlMsgs';
 
 const DeleteProductForm = ({ product }) => {
   const { formData, formActive, handleError, handleProductList, handleFetchTime, handleAction } = useContext(AppContext);
@@ -22,12 +23,12 @@ const DeleteProductForm = ({ product }) => {
           handleError(data.error)
         } else {
           handleProductList(data)
+          const endTime = performance.now()
+          const time = endTime - startTime
+          handleFetchTime(time.toFixed(2) + ' ms')
         }
       })
       .catch((err) => handleError(err.message))
-    const endTime = performance.now()
-    const time = endTime - startTime
-    handleFetchTime(time.toFixed(2) + ' ms')
   }
   return (
     <form onSubmit={handleSubmit}>

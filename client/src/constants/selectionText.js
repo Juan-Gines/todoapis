@@ -6,4 +6,8 @@ export const SELECTION_TEXT = Object.freeze({
 	LARAVEL: 'laravel',
 	NET: 'net',
 	NAME: 'name',
+	MYSQL: 'mysql',
+	POSTGRES: 'postgres',
+	SQLSERVER: 'sqlserver',
+	MONGODB: 'mongodb',
 });

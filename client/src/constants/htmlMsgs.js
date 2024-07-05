@@ -6,7 +6,7 @@ export const HTML_MSG = Object.freeze({
 			label: 'Selecciona un servidor',
 			titleSelection: 'Selecciona una opción',
 			options: [
-				{ value: 'node', label: 'Servidor Node' },
+				{ value: 'node', label: 'Servidor Node.js' },
 				{ value: 'laravel', label: 'Servidor Laravel' },				
 				{ value: 'net', label: 'Servidor ASP.NET' },				
 			],
@@ -35,5 +35,15 @@ export const HTML_MSG = Object.freeze({
 		UPDATE: 'Actualizar',
 		GET: 'Obtener',
 	},
-	
+	API: {
+		NODE: 'Node.js',
+		LARAVEL: 'Laravel',
+		NET: 'ASP.NET',
+	},
+	BBDD: {
+		MYSQL: 'MySQL',
+		POSTGRES: 'PostgreSQL',
+		SQLSERVER: 'SqlServer',
+		MONGODB: 'Mongodb',
+	},
 });

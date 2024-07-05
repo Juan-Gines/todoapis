@@ -14,10 +14,8 @@ const ProductsList = () => {
 	if (loading) {
 		return <div>{HTML_MSG.LOADING}</div>;
 	}
-	console.log(productList)
 	return (
-		<ul className='space-y-2'>
-			
+		<ul className='space-y-2'>			
 			{
 				productList.length > 0 ? (
 					
